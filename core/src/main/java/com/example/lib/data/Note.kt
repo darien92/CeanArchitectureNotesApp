@@ -1,9 +1,9 @@
 package com.example.lib.data
 
 data class Note(
-    val title: String,
-    val content: String,
-    val creationTime: Long,
-    val updateTime: Long,
-    val id: Long = 0
+    var title: String,
+    var content: String,
+    var creationTime: Long,
+    var updateTime: Long,
+    var id: Long = 0
 )

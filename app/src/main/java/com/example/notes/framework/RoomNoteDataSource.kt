@@ -7,7 +7,8 @@ import com.example.notes.framework.db.DatabaseService
 import com.example.notes.framework.db.NoteEntity
 
 class RoomNoteDataSource(context: Context): NoteDataSource {
-    val noteDao = DatabaseService.getInstance(context).noteDao()
+    private val noteDao = DatabaseService.getInstance(context).noteDao()
+
     override suspend fun add(note: Note) = noteDao.addNoteEntity(NoteEntity.fromNoteToEntity(note))
 
     override suspend fun get(id: Long): Note? = noteDao.getNoteEntity(id)?.toNoteFromEntity()
@@ -15,5 +16,4 @@ class RoomNoteDataSource(context: Context): NoteDataSource {
     override suspend fun getAll(): List<Note> = noteDao.getAllNoteEntity().map { it.toNoteFromEntity() }
 
     override suspend fun remove(note: Note) = noteDao.deleteNoteEntity(NoteEntity.fromNoteToEntity(note))
-
 }
