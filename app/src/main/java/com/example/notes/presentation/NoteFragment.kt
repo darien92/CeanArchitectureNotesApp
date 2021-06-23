@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -18,6 +19,7 @@ import com.example.notes.framework.viewmodels.NoteViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NoteFragment : Fragment() {
+    private var noteId: Long = 0L
     private lateinit var viewModel: NoteViewModel
     private var currentNote = Note("", "", 0L, 0L)
     private lateinit var fabConfirmAdd: FloatingActionButton
@@ -35,9 +37,17 @@ class NoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(NoteViewModel::class.java)
 
+        //getting the NoteId
+        arguments?.let {
+            noteId = NoteFragmentArgs.fromBundle(it).noteId
+        }
+
         fabConfirmAdd = view.findViewById(R.id.fab_confirm_add_note)
         etTitle = view.findViewById(R.id.et_note_title)
         etContent = view.findViewById(R.id.et_note_content)
+        if (noteId != 0L){
+            viewModel.getCurrentNote(noteId)
+        }
 
         fabConfirmAdd.setOnClickListener {
             if (!etTitle.equals("") || !etContent.equals("")){
@@ -58,7 +68,7 @@ class NoteFragment : Fragment() {
     }
 
     private fun observeViewModel(){
-        viewModel.isSaved().observe(viewLifecycleOwner, Observer {
+        viewModel.isSaved().observe(viewLifecycleOwner, {
             if(it){
                 Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show()
                 hideKeyboard()
@@ -66,6 +76,15 @@ class NoteFragment : Fragment() {
             }else{
                 Toast.makeText(context, "Something went wrong, please try again", Toast.LENGTH_SHORT).show()
             }
+        })
+
+        viewModel.currentNote.observe(viewLifecycleOwner, { note ->
+            note?.let { //aqui entra si note no es null
+                currentNote = it
+                etTitle.setText(it.title, TextView.BufferType.EDITABLE)
+                etContent.setText(it.content, TextView.BufferType.EDITABLE)
+            }
+
         })
     }
 
