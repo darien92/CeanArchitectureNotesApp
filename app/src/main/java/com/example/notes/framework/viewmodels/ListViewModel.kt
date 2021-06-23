@@ -24,7 +24,7 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
         GetAllNotes(repository),
         RemoveNote(repository)
     )
-    private val notes = MutableLiveData<List<Note>>()
+    val notes = MutableLiveData<List<Note>>()
 
     fun getNote(){
         coroutineScope.launch {
