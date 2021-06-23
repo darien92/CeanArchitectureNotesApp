@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="card_title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="card_content">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="text_detail">
+        <item name="android:textSize">10sp</item>
+    </style>
+</resources>
