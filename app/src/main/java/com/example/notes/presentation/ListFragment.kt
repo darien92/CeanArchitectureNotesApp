@@ -15,8 +15,8 @@ import com.example.notes.R
 import com.example.notes.framework.viewmodels.ListViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class ListFragment : Fragment() {
-    private val notesListAdapter = NotesListAdapter(arrayListOf())
+class ListFragment : Fragment(), ListAction {
+    private val notesListAdapter = NotesListAdapter(arrayListOf(), this)
 
     private lateinit var fabAddNote: FloatingActionButton
     private lateinit var viewModel: ListViewModel
@@ -41,7 +41,7 @@ class ListFragment : Fragment() {
 
         fabAddNote = view.findViewById(R.id.fab_add_note)
         fabAddNote.setOnClickListener {
-            goToNoteDetails(0)
+            goToNoteDetails()
         }
 
         viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
@@ -64,5 +64,9 @@ class ListFragment : Fragment() {
     private fun goToNoteDetails(id:Long = 0L){
         val action: NavDirections = ListFragmentDirections.actionListFragmentToNoteFragment(id)
         Navigation.findNavController(requireView()).navigate(action)
+    }
+
+    override fun onClick(id: Long) {
+        goToNoteDetails(id)
     }
 }
