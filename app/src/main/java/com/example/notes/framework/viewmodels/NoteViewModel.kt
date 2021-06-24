@@ -45,6 +45,13 @@ class NoteViewModel(
         }
     }
 
+    fun deleteNote(note: Note){
+        coroutineScope.launch {
+            useCases.removeNote(note)
+            saved.postValue(true)
+        }
+    }
+
     fun isSaved(): LiveData<Boolean>{
         return saved
     }

@@ -2,14 +2,13 @@ package com.example.notes.presentation
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
@@ -17,6 +16,7 @@ import com.example.lib.data.Note
 import com.example.notes.R
 import com.example.notes.framework.viewmodels.NoteViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.coroutineScope
 
 class NoteFragment : Fragment() {
     private var noteId: Long = 0L
@@ -25,6 +25,11 @@ class NoteFragment : Fragment() {
     private lateinit var fabConfirmAdd: FloatingActionButton
     private lateinit var etTitle: EditText
     private lateinit var etContent: EditText
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,4 +97,31 @@ class NoteFragment : Fragment() {
         val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(etTitle.windowToken, 0)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.note_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.delete_note -> {
+                if(context != null && noteId != 0L){
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Delete note")
+                        .setMessage("Are you sure you want to delete this note?")
+                        .setPositiveButton("Yes"){ _, _ ->
+                            viewModel.deleteNote(currentNote)
+                        }
+                        .setNegativeButton("Cancel"){ dialogInterface, _ ->
+                            dialogInterface.dismiss()
+                        }
+                        .create()
+                        .show()
+                }
+            }
+        }
+        return true
+    }
+
 }
