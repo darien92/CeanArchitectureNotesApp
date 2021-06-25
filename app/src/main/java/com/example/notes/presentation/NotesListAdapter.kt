@@ -1,10 +1,12 @@
 package com.example.notes.presentation
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lib.data.Note
 import com.example.notes.R
@@ -31,6 +33,7 @@ class NotesListAdapter (var  notes: ArrayList<Note>, val action: ListAction): Re
         private val title: TextView = view.findViewById(R.id.card_title)
         private val content: TextView = view.findViewById(R.id.card_content)
         private val modifiedDate: TextView = view.findViewById(R.id.card_date)
+        private val noteWord: TextView = view.findViewById(R.id.tv_word_count)
 
         fun bind(note: Note){
             title.text = note.title
@@ -41,6 +44,8 @@ class NotesListAdapter (var  notes: ArrayList<Note>, val action: ListAction): Re
             layout.setOnClickListener {
                 action.onClick(note.id)
             }
+
+            noteWord.text = "${title.context.getString(R.string.word_title)} ${note.wordCount}"
         }
     }
 }

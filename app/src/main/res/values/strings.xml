@@ -4,4 +4,5 @@
     <string name="title">Title</string>
     <string name="content">Content</string>
     <string name="delete_note">Delete note</string>
+    <string name="word_title">Words:</string>
 </resources>
